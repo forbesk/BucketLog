@@ -1,9 +1,12 @@
 package org.frc4183.bucketlog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BucketLog {
 	private static BucketLog instance = null;
-	private Recorder recorder;
-	private Thread thread;
+	private ArrayList<Recorder> recorders = new ArrayList<Recorder>();
+	private ArrayList<Thread> threads = new ArrayList<Thread>();
 	private boolean paused = false;
 	
 	public static BucketLog getInstance() {
@@ -15,14 +18,20 @@ public class BucketLog {
 	}
 	
 	private BucketLog() {
-		recorder = new Recorder("test.csv");
-		thread = new Thread(recorder);
-		thread.start();
+		
+	}
+	
+	public void addRecorder(Recorder recorder) {
+		Thread t = new Thread(recorder);
+		recorders.add(recorder);
+		threads.add(t);
 	}
 	
 	public void log(long time, String name, String value) {
 		if(!paused) {
-			recorder.publish(time, name, value);
+			for(Recorder r : recorders) {
+				r.publish(time, name, value);
+			}
 		}
 	}
 	
@@ -32,5 +41,11 @@ public class BucketLog {
 	
 	public void resume() {
 		paused = false;
+	}
+	
+	public void stop() {
+		for(Recorder r : recorders) {
+			r.stop();
+		}
 	}
 }

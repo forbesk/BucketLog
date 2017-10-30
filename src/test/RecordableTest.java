@@ -1,6 +1,7 @@
 package test;
 
 import org.frc4183.bucketlog.BucketLog;
+import org.frc4183.bucketlog.CSVRecorder;
 import org.frc4183.bucketlog.Recordable;
 
 import junit.framework.TestCase;
@@ -9,7 +10,9 @@ public class RecordableTest extends TestCase {
 	
 	protected void setUp() throws Exception {
 		super.setUp();
-		BucketLog.getInstance().log(System.currentTimeMillis(), "Test", "Some data");
+		BucketLog bl = BucketLog.getInstance();
+		bl.addRecorder(new CSVRecorder("test.csv"));
+		bl.log(System.currentTimeMillis(), "Test", "Some data");
 	}
 	
 	public void testSomething() throws InterruptedException {
