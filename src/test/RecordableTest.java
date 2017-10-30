@@ -12,13 +12,14 @@ public class RecordableTest extends TestCase {
 		super.setUp();
 		BucketLog bl = BucketLog.getInstance();
 		bl.addRecorder(new CSVRecorder("test.csv"));
+		bl.start();
 		bl.log(System.currentTimeMillis(), "Test", "Some data");
 	}
 	
 	public void testSomething() throws InterruptedException {
-		Recordable<Integer> n = new Recordable<>("n");
-		Recordable<Boolean> b = new Recordable<>("b");
-		Recordable<Double> d = new Recordable<>("d");
+		Recordable<Integer> n = new Recordable<>("An integer");
+		Recordable<Boolean> b = new Recordable<>("Some boolean");
+		Recordable<Double> d = new Recordable<>("The double");
 		
 		for(int i = 0; i < 100; i++) {
 			n.update(i);
